@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             GithubcontributaionwidgetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Ivan",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
