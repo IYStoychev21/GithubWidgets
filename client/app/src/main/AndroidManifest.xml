@@ -21,6 +21,10 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:scheme="github-widgets"
+                    android:host="github-widgets" />
             </intent-filter>
         </activity>
     </application>
