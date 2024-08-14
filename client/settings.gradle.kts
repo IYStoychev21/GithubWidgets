@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "github-contributaion-widget"
+rootProject.name = "GitHub Widgets"
 include(":app")

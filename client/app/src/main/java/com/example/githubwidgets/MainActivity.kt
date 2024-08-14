@@ -1,4 +1,4 @@
-package com.example.github_contributaion_widget
+package com.example.githubwidgets
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,17 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.github_contributaion_widget.ui.theme.GithubcontributaionwidgetTheme
+import com.example.githubwidgets.ui.theme.GitHubWidgetsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GithubcontributaionwidgetTheme {
+            GitHubWidgetsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Ivan",
+                        name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -41,7 +41,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    GithubcontributaionwidgetTheme {
+    GitHubWidgetsTheme {
         Greeting("Android")
     }
 }

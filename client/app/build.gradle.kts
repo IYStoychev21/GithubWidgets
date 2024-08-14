@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.github_contributaion_widget"
+    namespace = "com.example.githubwidgets"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.github_contributaion_widget"
+        applicationId = "com.example.githubwidgets"
         minSdk = 31
         targetSdk = 34
         versionCode = 1
@@ -38,7 +38,6 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

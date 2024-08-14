@@ -1,4 +1,4 @@
-package com.example.github_contributaion_widget.ui.theme
+package com.example.githubwidgets.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
