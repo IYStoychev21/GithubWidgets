@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        println("Test")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -45,10 +46,8 @@ class MainActivity : ComponentActivity() {
 
     private fun handleIntent(intent: Intent) {
         val data: Uri? = intent.data
-        if (data != null && data.scheme == "github-widgets" && data.host == "auth") {
-            val token = data.getQueryParameter("token")
-            handleToken(token)
-        }
+        val token = data?.getQueryParameter("token")
+        handleToken(token)
     }
 
     private fun handleToken(token: String?) {

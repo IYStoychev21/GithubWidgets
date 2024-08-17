@@ -46,7 +46,7 @@ app.get('/auth/github/callback',
   (req, res) => {
     if (req.user) {
       // @ts-ignore
-      res.redirect(`github-widgets://auth?token=${req.user.accessToken}`);
+      res.redirect(`github-widgets://github-widgets/auth?token=${req.user.accessToken}`);
     } else {
       res.redirect('/');
     }
