@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.githubwidgets.ui.theme.GitHubWidgetsTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.githubwidgets.CredentialManager
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("Test")
         super.onCreate(savedInstanceState)
+        credentialManager = CredentialManager(this)
+
         enableEdgeToEdge()
         setContent {
             GitHubWidgetsTheme {
@@ -52,9 +54,12 @@ class MainActivity : ComponentActivity() {
 
     private fun handleToken(token: String?) {
         if(token != null) {
-            println(token)
+            credentialManager.storeToken(token)
+            println(credentialManager.getToken())
         }
     }
+
+    private lateinit var credentialManager: CredentialManager
 }
 
 @Composable

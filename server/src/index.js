@@ -3,6 +3,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import cors from 'cors';
+import axios from 'axios';
 
 const app = express();
 
@@ -61,10 +62,36 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+app.get('/user', async (req, res) => {
+  const token = req.headers.authorization 
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const user = await axios.get('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const userProfile = user.data;
+
+    const userResponse = {
+      email: userProfile.email,
+      name: userProfile.name,
+      avatar: userProfile.avatar_url,
+      username: userProfile.login,
+      company: userProfile.company,
+    };
+
+    res.send(userResponse);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+})
 
 app.listen(process.env.PORT, () => {
-  console.log('Server is running on http://localhost:3000');
+  console.log('Server is running');
 });
