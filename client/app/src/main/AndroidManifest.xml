@@ -14,6 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GitHubWidgets"
         tools:targetApi="31">
+
+        <receiver android:name=".ContributaionWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/contributaion_widget_info" />
+        </receiver>
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false"
