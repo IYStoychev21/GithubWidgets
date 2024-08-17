@@ -27,6 +27,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         credentialManager = CredentialManager(this)
 
+        if(credentialManager.getToken() != null) {
+            val profileIntent = Intent(this, ProfileActivity::class.java).apply {
+                putExtra("TOKEN", credentialManager.getToken())
+            }
+
+            startActivity(profileIntent)
+            finish()
+        }
+
         enableEdgeToEdge()
         setContent {
             GitHubWidgetsTheme {
@@ -55,7 +64,13 @@ class MainActivity : ComponentActivity() {
     private fun handleToken(token: String?) {
         if(token != null) {
             credentialManager.storeToken(token)
-            println(credentialManager.getToken())
+
+            val profileIntent = Intent(this, ProfileActivity::class.java).apply {
+                putExtra("TOKEN", token)
+            }
+
+            startActivity(profileIntent)
+            finish()
         }
     }
 
