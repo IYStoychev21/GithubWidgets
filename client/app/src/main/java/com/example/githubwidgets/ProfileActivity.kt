@@ -30,24 +30,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.githubwidgets.ui.theme.GitHubWidgetsTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.githubwidgets.OkHttpClientInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.internal.userAgent
 import org.json.JSONObject
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        val token = intent.getStringExtra("TOKEN")
-        
+
         enableEdgeToEdge()
         setContent {
             GitHubWidgetsTheme {
@@ -62,7 +57,7 @@ class ProfileActivity : ComponentActivity() {
                             .padding(horizontal = 40.dp, vertical = 50.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        GetProfile(token = token)
+                        GetProfile()
                     }
                 }
             }
@@ -71,10 +66,7 @@ class ProfileActivity : ComponentActivity() {
 }
 
 @Composable
-fun GetProfile(token: String?) {
-    if (token == null)
-        return
-
+fun GetProfile() {
     val scope = rememberCoroutineScope()
     var userProfile by remember { mutableStateOf<ProfileData?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -82,7 +74,7 @@ fun GetProfile(token: String?) {
     LaunchedEffect(Unit) {
         scope.launch(Dispatchers.IO) {
             try {
-                val response = OkHttpClientInstance.getUserProfile(token)
+                val response = OkHttpClientInstance.getUserProfile()
                 val jsonResponse = JSONObject(response ?: "")
                 userProfile = ProfileData(
                     username = jsonResponse.getString("username"),
@@ -109,6 +101,7 @@ fun GetProfile(token: String?) {
 
 @Composable
 fun ProfileCard(userProfile: ProfileData) {
+    CredentialManager.storeUsername(userProfile.username)
 
     Row(
         modifier = Modifier

@@ -1,19 +1,12 @@
 package com.example.githubwidgets
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class CredentialManager(context: Context) {
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        "auth_preferences",
-        MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build(),
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+object CredentialManager {
+    lateinit var sharedPreferences: SharedPreferences
 
     fun storeToken(token: String) {
         with(sharedPreferences.edit()) {
@@ -26,10 +19,21 @@ class CredentialManager(context: Context) {
         return sharedPreferences.getString("token", null)
     }
 
-   fun clearToken() {
-       with(sharedPreferences.edit()) {
-           remove("token")
-           apply()
-       }
-   }
+    fun storeUsername(username: String) {
+        with(sharedPreferences.edit()) {
+            putString("username", username)
+            apply()
+        }
+    }
+
+    fun getUsername(): String? {
+        return sharedPreferences.getString("username", null)
+    }
+
+    fun clearToken() {
+        with(sharedPreferences.edit()) {
+            remove("token")
+            apply()
+        }
+    }
 }

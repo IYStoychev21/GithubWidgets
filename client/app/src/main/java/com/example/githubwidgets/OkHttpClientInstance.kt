@@ -16,10 +16,13 @@ object OkHttpClientInstance {
         .build()
 
     @Throws(IOException::class)
-    fun getUserProfile(token: String): String? {
+    fun getUserProfile(): String? {
+        if(CredentialManager.getToken() == null)
+            return ""
+
         val request = Request.Builder()
             .url("https://github-widgets-api-c9b3bdamdrg0hrg3.germanywestcentral-01.azurewebsites.net/user")
-            .addHeader("Authorization", token)
+            .addHeader("Authorization", CredentialManager.getToken().toString())
             .build()
 
         client.newCall(request).execute().use { response ->

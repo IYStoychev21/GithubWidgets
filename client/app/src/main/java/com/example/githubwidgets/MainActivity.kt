@@ -20,18 +20,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.githubwidgets.ui.theme.GitHubWidgetsTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.githubwidgets.CredentialManager
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        credentialManager = CredentialManager(this)
 
-        if(credentialManager.getToken() != null) {
-            val profileIntent = Intent(this, ProfileActivity::class.java).apply {
-                putExtra("TOKEN", credentialManager.getToken())
-            }
+        CredentialManager.sharedPreferences = EncryptedSharedPreferences.create(
+            this,
+            "auth_preferences",
+            MasterKey.Builder(this)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
 
+        if(CredentialManager.getToken() != null) {
+            val profileIntent = Intent(this, ProfileActivity::class.java).apply {}
             startActivity(profileIntent)
             finish()
         }
@@ -63,7 +70,7 @@ class MainActivity : ComponentActivity() {
 
     private fun handleToken(token: String?) {
         if(token != null) {
-            credentialManager.storeToken(token)
+            CredentialManager.storeToken(token)
 
             val profileIntent = Intent(this, ProfileActivity::class.java).apply {
                 putExtra("TOKEN", token)
@@ -73,8 +80,6 @@ class MainActivity : ComponentActivity() {
             finish()
         }
     }
-
-    private lateinit var credentialManager: CredentialManager
 }
 
 @Composable
