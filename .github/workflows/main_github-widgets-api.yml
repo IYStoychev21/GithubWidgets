@@ -29,13 +29,13 @@ jobs:
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./server/* -r
+        run: zip server/release.zip ./server/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: server/release.zip
 
   deploy:
     runs-on: ubuntu-latest
