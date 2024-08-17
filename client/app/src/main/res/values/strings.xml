@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHub Widgets</string>
+    <string name="auth_url">http://localhost:3000/auth/github</string>>
 </resources>
