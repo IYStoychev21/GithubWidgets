@@ -4,29 +4,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.githubwidgets.ui.theme.GitHubWidgetsTheme
@@ -34,6 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.githubwidgets.OkHttpClientInstance
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.internal.userAgent
+import org.json.JSONObject
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +62,7 @@ class ProfileActivity : ComponentActivity() {
                             .padding(horizontal = 40.dp, vertical = 50.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        ProfileCard(token = token)
+                        GetProfile(token = token)
                     }
                 }
             }
@@ -64,21 +71,49 @@ class ProfileActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProfileCard(token: String?) {
-    val userProfile = remember {
-        ProfileData(
-            username = "johndoe69",
-            email = "jogndoe69@gmail.com",
-            name = "John Doe",
-            company = "Random Company" ,
-            avatar = "https://avatars.githubusercontent.com/u/98114211?v=4"
-        )
+fun GetProfile(token: String?) {
+    if (token == null)
+        return
+
+    val scope = rememberCoroutineScope()
+    var userProfile by remember { mutableStateOf<ProfileData?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                val response = OkHttpClientInstance.getUserProfile(token)
+                val jsonResponse = JSONObject(response ?: "")
+                userProfile = ProfileData(
+                    username = jsonResponse.getString("username"),
+                    email = jsonResponse.getString("email"),
+                    name = jsonResponse.getString("name"),
+                    avatar = jsonResponse.getString("avatar"),
+                    company = jsonResponse.getString("company")
+                )
+            } catch (e: Exception) {
+                error = "Failed to load user data"
+                e.printStackTrace()
+            }
+        }
     }
+
+    if(userProfile != null) {
+        ProfileCard(userProfile!!)
+    }else if (error != null) {
+        Text(text = error!!, color = Color(0xffffffff))
+    } else {
+        Text(text = "Loading...", color = Color(0xffffffff))
+    }
+}
+
+@Composable
+fun ProfileCard(userProfile: ProfileData) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
+            .height(200.dp)
             .background(Color(0xFF625B71), RoundedCornerShape(10.dp))
             .padding(15.dp),
     ) {
@@ -89,6 +124,7 @@ fun ProfileCard(token: String?) {
                 .build(),
             contentDescription = "Profile Avatar",
             modifier = Modifier
+                .width(80.dp)
                 .graphicsLayer {
                     this.shape = CircleShape
                     this.clip = true
@@ -136,12 +172,6 @@ fun ProfileCard(token: String?) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ProfileScreenPreview() {
-    ProfileCard(token = "This is not a token")
 }
 
 data class ProfileData(
