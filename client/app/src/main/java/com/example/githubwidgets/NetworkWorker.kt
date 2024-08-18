@@ -50,8 +50,6 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                         }
                     }
 
-                    // Update Glance widgets
-//                    updateGlanceWidgets(applicationContext)
                     ContributaionWidget().updateAll(applicationContext)
 
                     Result.success()
@@ -82,10 +80,7 @@ fun scheduleNetworkRequests(context: Context) {
     )
 }
 
-
 fun testScheduleNetworkRequests(context: Context) {
-    Log.d("NetworkWorkerTest", "Testing network requests")
-
     val workRequest = OneTimeWorkRequestBuilder<NetworkWorker>()
         .build()
     WorkManager.getInstance(context).enqueue(workRequest)

@@ -44,8 +44,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-//var contributaionGraph =
-//    Array(210) { Color(0xff161b22) }
 
 class ContributaionWidget : GlanceAppWidget() {
 
