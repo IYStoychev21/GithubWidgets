@@ -3,6 +3,7 @@ package com.example.githubwidgets
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -22,11 +23,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import androidx.work.WorkManager
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleWidgetUpdates(this)
+        scheduleNetworkRequests(this)
+        testScheduleNetworkRequests(this)
+
+        WorkManager.getInstance(this).getWorkInfosByTagLiveData("NetworkWorker").observeForever { workInfos ->
+            workInfos.forEach {
+                Log.d("NetworkWorkerStatus", "Work Info: $it")
+            }
+        }
 
         CredentialManager.sharedPreferences = EncryptedSharedPreferences.create(
             this,

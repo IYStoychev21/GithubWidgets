@@ -59,6 +59,7 @@ dependencies {
     implementation("androidx.glance:glance-appwidget:1.1.0-rc01")
     implementation("androidx.glance:glance-appwidget-preview:1.0-rc01")
     implementation("androidx.glance:glance-preview:1.0-rc01")
+    implementation("androidx.work:work-runtime:2.7.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

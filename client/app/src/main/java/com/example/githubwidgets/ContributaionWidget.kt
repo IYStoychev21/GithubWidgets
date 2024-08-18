@@ -41,6 +41,8 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
+var contributaionGraph = Array(7) { Array(50) { Color(0xff161b22) } }
+
 class ContributaionWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
@@ -51,60 +53,12 @@ class ContributaionWidget : GlanceAppWidget() {
                     .padding(0.dp),
                 contentAlignment = Alignment.Center
             ) {
-                FetchGraph()
+
+                ContributionWidgetLayout(contributaionGraph = contributaionGraph)
             }
         }
     }
 }
-
-@Composable
-fun FetchGraph() {
-    val scope = rememberCoroutineScope()
-    var error by remember { mutableStateOf<String?>(null) }
-    var contributaionsResponse by remember {
-        mutableStateOf<JSONObject?>(null)
-    }
-
-    var contributaionGraph: Array<Array<Color>> by remember {
-        mutableStateOf(Array<Array<Color>>(7) { Array<Color>(50) {Color(0xff161B22) }})
-    }
-
-    LaunchedEffect(Unit) {
-        scope.launch(Dispatchers.IO) {
-            try {
-                val response = OkHttpClientInstance.getContributaions()
-                val jsonResponse = JSONObject(response ?: "")
-                contributaionsResponse = jsonResponse
-
-            } catch (e: Exception) {
-                error = "Failed to load user data"
-                e.printStackTrace()
-            }
-        }
-    }
-
-    if(contributaionsResponse != null) {
-        for (i in 14..349) {
-            val row = (i - 14) % 50
-            val col = (i - 14) / 50
-
-            when (contributaionsResponse!!.getJSONObject("contributions").getJSONObject(i.toString()).getInt("level")) {
-                0 -> contributaionGraph[row][col] = Color(0xff161B22)
-                1 -> contributaionGraph[row][col] = Color(0xff0E4429)
-                2 -> contributaionGraph[row][col] = Color(0xff26A641)
-                3 -> contributaionGraph[row][col] = Color(0xff26A641)
-                4 -> contributaionGraph[row][col] = Color(0xff39D353)
-            }
-        }
-
-        ContributionWidgetLayout(contributaionGraph)
-    } else if (error != null) {
-        Text(text = error!!, color = Color(0xffff0000))
-    } else {
-        Text(text = "Loading...", color = Color(0xffffffff))
-    }
-}
-
 
 @Composable
 fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
