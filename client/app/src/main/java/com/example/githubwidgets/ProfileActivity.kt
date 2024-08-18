@@ -1,5 +1,6 @@
 package com.example.githubwidgets
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -71,6 +72,8 @@ fun GetProfile() {
     var userProfile by remember { mutableStateOf<ProfileData?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
 
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         scope.launch(Dispatchers.IO) {
             try {
@@ -83,7 +86,14 @@ fun GetProfile() {
                     avatar = jsonResponse.getString("avatar"),
                     company = jsonResponse.getString("company")
                 )
+
+                CredentialManager.storeToken(jsonResponse.getString("token"))
+                CredentialManager.storeRefreshToken(jsonResponse.getString("refresh_token"))
             } catch (e: Exception) {
+                val mainIntent = Intent(context, MainActivity::class.java).apply{}
+                context.startActivity(mainIntent)
+                CredentialManager.clearToken()
+
                 error = "Failed to load user data"
                 e.printStackTrace()
             }
@@ -93,7 +103,7 @@ fun GetProfile() {
     if(userProfile != null) {
         ProfileCard(userProfile!!)
     }else if (error != null) {
-        Text(text = error!!, color = Color(0xffffffff))
+        Text(text = error!!, color = Color(0xffff0000))
     } else {
         Text(text = "Loading...", color = Color(0xffffffff))
     }
@@ -172,5 +182,5 @@ data class ProfileData(
     val name: String,
     val avatar: String,
     val username: String,
-    val company: String
+    val company: String,
 )

@@ -35,19 +35,20 @@ passport.use(new GitHubStrategy({
   callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:3000/auth/github/callback'
 },
 (accessToken, refreshToken, profile, done) => {
-  const user = { profile, accessToken };
+  const user = { profile, accessToken, refreshToken };
   return done(null, user);
 }));
 
 app.get('/auth/github',
-  passport.authenticate('github', { scope: ['user:username'] }));
+  passport.authenticate('github'));
 
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
   (req, res) => {
     if (req.user) {
       // @ts-ignore
-      res.redirect(`github-widgets://github-widgets/auth?token=${req.user.accessToken}`);
+      res.redirect(`github-widgets://github-widgets/auth?token=${req.user.accessToken}&refresh_token=${req.user.refreshToken}`);
+      // res.json(req.user);
     } else {
       res.redirect('/');
     }
@@ -63,7 +64,8 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/user', async (req, res) => {
-  const token = req.headers.authorization 
+  const token = req.headers.authorization.split(' ')[0]
+  const refresh_token = req.headers.authorization.split(' ')[1]
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
@@ -84,11 +86,39 @@ app.get('/user', async (req, res) => {
       avatar: userProfile.avatar_url,
       username: userProfile.login,
       company: userProfile.company,
+      token,
+      refresh_token,
     };
 
     res.send(userResponse);
-  } catch (error) {
-    res.status(401).json({ message: error.message });
+  } catch (e) {
+      if (e.response.status === 401) {
+        try {
+          const newToken = await axios.post(`https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&refresh_token=${refresh_token}&grant_type=refresh_token`);
+
+          const user = await axios.get('https://api.github.com/user', {
+            headers: {
+              Authorization: `Bearer ${newToken.data.access_token}`
+            }
+          });
+
+          const userProfile = user.data;
+
+          const userResponse = {
+            email: userProfile.email,
+            name: userProfile.name,
+            avatar: userProfile.avatar_url,
+            username: userProfile.login,
+            company: userProfile.company,
+            token: newToken.data.access_token,
+            refresh_token: newToken.data.refresh_token,
+          };
+
+          res.send(userResponse);
+        } catch (e) {
+          res.status(401).json({ message: 'Unauthorized' });
+        }
+    }
   }
 })
 

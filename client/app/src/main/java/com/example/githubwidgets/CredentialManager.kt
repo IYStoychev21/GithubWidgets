@@ -30,6 +30,17 @@ object CredentialManager {
         return sharedPreferences.getString("username", null)
     }
 
+    fun storeRefreshToken(refreshToken: String) {
+        with(sharedPreferences.edit()) {
+            putString("refresh_token", refreshToken)
+            apply()
+        }
+    }
+
+    fun getRefreshToken(): String? {
+        return sharedPreferences.getString("refresh_token", null)
+    }
+
     fun clearToken() {
         with(sharedPreferences.edit()) {
             remove("token")

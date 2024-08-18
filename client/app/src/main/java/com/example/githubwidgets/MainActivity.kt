@@ -65,16 +65,17 @@ class MainActivity : ComponentActivity() {
     private fun handleIntent(intent: Intent) {
         val data: Uri? = intent.data
         val token = data?.getQueryParameter("token")
-        handleToken(token)
+        val refreshToken = data?.getQueryParameter("refresh_token")
+
+        handleToken(refreshToken, refreshToken)
     }
 
-    private fun handleToken(token: String?) {
-        if(token != null) {
+    private fun handleToken(token: String?, refreshToken: String?) {
+        if(token != null && refreshToken != null) {
             CredentialManager.storeToken(token)
+            CredentialManager.storeRefreshToken(refreshToken)
 
-            val profileIntent = Intent(this, ProfileActivity::class.java).apply {
-                putExtra("TOKEN", token)
-            }
+            val profileIntent = Intent(this, ProfileActivity::class.java).apply {}
 
             startActivity(profileIntent)
             finish()
