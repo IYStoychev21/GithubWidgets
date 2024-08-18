@@ -40,21 +40,21 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
 
                     // Save or process the response data here
                     // Example: Save to SharedPreferences or a database
-                    for (i in 14..349) {
-                        val row = (i - 14) / 49
-                        val col = (i - 14) % 49
-
-                        Log.d("ColorWidget", jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level").toString())
-
-                        when (jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level")) {
-                            0 -> contributaionGraph[row][col] = Color(0xff161B22)
-                            1 -> contributaionGraph[row][col] = Color(0xff0E4429);
-                            2 -> contributaionGraph[row][col] = Color(0xff26A641)
-                            3 -> contributaionGraph[row][col] = Color(0xff26A641)
-                            4 -> contributaionGraph[row][col] = Color(0xff39D353)
-                        }
-
-                    }
+//                    for (i in 14..349) {
+//                        val row = (i - 14) / 49
+//                        val col = (i - 14) % 49
+//
+//                        Log.d("ColorWidget", jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level").toString())
+//
+//                        when (jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level")) {
+//                            0 -> contributaionGraph[row][col] = Color(0xff161B22)
+//                            1 -> contributaionGraph[row][col] = Color(0xff0E4429);
+//                            2 -> contributaionGraph[row][col] = Color(0xff26A641)
+//                            3 -> contributaionGraph[row][col] = Color(0xff26A641)
+//                            4 -> contributaionGraph[row][col] = Color(0xff39D353)
+//                        }
+//
+//                    }
 
 
                     // Update Glance widgets

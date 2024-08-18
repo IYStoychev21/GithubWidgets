@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-var contributaionGraph = Array(7) { Array(50) { Color(0xff161b22) } }
+var contributaionGraph = Array(30) { Array(7) { Color(0xff161b22) } }
 
 class ContributaionWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -49,7 +49,7 @@ class ContributaionWidget : GlanceAppWidget() {
             Box(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .background(Color(0x000d1117))
+                    .background(Color(0xff0d1117))
                     .padding(0.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -63,325 +63,220 @@ class ContributaionWidget : GlanceAppWidget() {
 @Composable
 fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
 
-    val squireSpacing = 1.dp
-    val squireSize = 6.dp
-    val corners = 1.dp
+    contributaionGraph[1][3] = Color(0xffffffff)
 
-    Box (
-        modifier = GlanceModifier
-            .background(Color(0xff0d1117))
-            .padding(5.dp)
-            .cornerRadius(2.dp)
-    )
-    {
-        Column {
-            Column {
-                for (i in 0..3) {
-                    Row {
-                        Row {
-                            Row {
-                                for (j in 0..4) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
+    val squireSpacing = 2.dp
+    val squireSize = 10.dp
+    val corners = 2.dp
 
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
+    Row {
+        Row {
+            for (i in 0..4) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
 
-                            Row {
-                                for (j in 5..9) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 10..14) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 15..19) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 20..24) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 25..29) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 30..34) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 35..39) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 40..44) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 45..48) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-
-                                Box(
-                                    modifier = GlanceModifier
-                                        .size(squireSize)
-                                        .background(contributaionGraph[i][49])
-                                        .cornerRadius(corners)
-                                ) {}
-                            }
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
                         }
                     }
-                    Spacer(modifier = GlanceModifier.height(squireSpacing))
+
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
                 }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
             }
+        }
 
-            Column {
-                for (i in 4..6) {
-                    Row {
-                        Row {
-                            Row {
-                                for (j in 0..4) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
+        Row {
+            for (i in 5..9) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
 
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 5..9) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 10..14) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 15..19) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 20..24) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 25..29) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 30..34) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 35..39) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-                        }
-
-                        Row {
-                            Row {
-                                for (j in 40..44) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-                            }
-
-                            Row {
-                                for (j in 45..48) {
-                                    Box(
-                                        modifier = GlanceModifier
-                                            .size(squireSize)
-                                            .background(contributaionGraph[i][j])
-                                            .cornerRadius(corners)
-                                    ) {}
-
-                                    Spacer(modifier = GlanceModifier.width(squireSpacing))
-                                }
-
-                                Box(
-                                    modifier = GlanceModifier
-                                        .size(squireSize)
-                                        .background(contributaionGraph[i][49])
-                                        .cornerRadius(corners)
-                                ) {}
-                            }
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
                         }
                     }
 
-                    Spacer(modifier = GlanceModifier.height(squireSpacing))
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
                 }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
+            }
+        }
+
+        Row {
+            for (i in 10..14) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+                }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
+            }
+        }
+
+        Row {
+            for (i in 15..19) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+                }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
+            }
+        }
+
+        Row {
+            for (i in 20..24) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+                }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
+            }
+        }
+
+        Row {
+            for (i in 25..29) {
+                Column {
+                    Column {
+                        for (j in 0..3) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+
+                    Column {
+                        for (j in 4..6)
+                        {
+                            Box(
+                                modifier = GlanceModifier
+                                    .size(squireSize)
+                                    .background(contributaionGraph[i][j])
+                                    .cornerRadius(corners)
+                            ) {}
+
+                            Spacer(modifier = GlanceModifier.height(squireSpacing))
+                        }
+                    }
+                }
+
+                Spacer(modifier = GlanceModifier.width(squireSpacing))
             }
         }
     }
