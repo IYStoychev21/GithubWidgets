@@ -16,6 +16,18 @@ object OkHttpClientInstance {
         .build()
 
     @Throws(IOException::class)
+    fun getContributaions(): String? {
+        val request = Request.Builder()
+            .url("https://github-contributions-api.jogruber.de/v4/IYStoychev21?y=last")
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if(!response.isSuccessful) throw IOException("$response.code")
+            return response.body?.string()
+        }
+    }
+
+    @Throws(IOException::class)
     fun getUserProfile(): String? {
         if(CredentialManager.getToken() == null)
             return ""

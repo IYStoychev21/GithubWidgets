@@ -122,6 +122,15 @@ app.get('/user', async (req, res) => {
   }
 })
 
+app.get("/get/contributions/:username", async (req, res) => {
+  try {
+    const contributions = await axios.get(`https://github-contributions-api.jogruber.de/v4/${req.params.username}?y=last`);
+    res.send(contributions.data);
+  } catch (e) {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
+
 app.listen(process.env.PORT, () => {
   console.log('Server is running');
 });

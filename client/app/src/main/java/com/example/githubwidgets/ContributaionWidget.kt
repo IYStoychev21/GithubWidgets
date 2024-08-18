@@ -1,9 +1,18 @@
 package com.example.githubwidgets
 
 import android.content.Context
+import android.content.Intent
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -18,9 +27,7 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
@@ -29,6 +36,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 class ContributaionWidget : GlanceAppWidget() {
@@ -41,23 +51,67 @@ class ContributaionWidget : GlanceAppWidget() {
                     .padding(0.dp),
                 contentAlignment = Alignment.Center
             ) {
-                ContributionWidgetLayout()
+                FetchGraph()
             }
         }
     }
 }
 
-var contributaionGraph = Array<Array<Color>>(7) { Array<Color>(50) {Color(0xff161B22) }};
+@Composable
+fun FetchGraph() {
+    val scope = rememberCoroutineScope()
+    var error by remember { mutableStateOf<String?>(null) }
+    var contributaionsResponse by remember {
+        mutableStateOf<JSONObject?>(null)
+    }
+
+    var contributaionGraph: Array<Array<Color>> by remember {
+        mutableStateOf(Array<Array<Color>>(7) { Array<Color>(50) {Color(0xff161B22) }})
+    }
+
+    LaunchedEffect(Unit) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                val response = OkHttpClientInstance.getContributaions()
+                val jsonResponse = JSONObject(response ?: "")
+                contributaionsResponse = jsonResponse
+
+            } catch (e: Exception) {
+                error = "Failed to load user data"
+                e.printStackTrace()
+            }
+        }
+    }
+
+    if(contributaionsResponse != null) {
+        for (i in 14..349) {
+            val row = (i - 14) % 50
+            val col = (i - 14) / 50
+
+            when (contributaionsResponse!!.getJSONObject("contributions").getJSONObject(i.toString()).getInt("level")) {
+                0 -> contributaionGraph[row][col] = Color(0xff161B22)
+                1 -> contributaionGraph[row][col] = Color(0xff0E4429)
+                2 -> contributaionGraph[row][col] = Color(0xff26A641)
+                3 -> contributaionGraph[row][col] = Color(0xff26A641)
+                4 -> contributaionGraph[row][col] = Color(0xff39D353)
+            }
+        }
+
+        ContributionWidgetLayout(contributaionGraph)
+    } else if (error != null) {
+        Text(text = error!!, color = Color(0xffff0000))
+    } else {
+        Text(text = "Loading...", color = Color(0xffffffff))
+    }
+}
+
 
 @Composable
-fun ContributionWidgetLayout() {
+fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
+
     val squireSpacing = 1.dp
     val squireSize = 6.dp
     val corners = 1.dp
-
-    contributaionGraph[0][0] = Color(0xff0E4429)
-    contributaionGraph[1][0] = Color(0xff0E4429)
-    contributaionGraph[6][49] = Color(0xff0E4429)
 
     Box (
         modifier = GlanceModifier
@@ -399,7 +453,7 @@ class MyWidgetWorker(context: Context, params: WorkerParameters) : CoroutineWork
 }
 
 fun scheduleWidgetUpdates(context: Context) {
-    val workRequest = PeriodicWorkRequestBuilder<MyWidgetWorker>(15, TimeUnit.MINUTES)
+    val workRequest = PeriodicWorkRequestBuilder<MyWidgetWorker>(60, TimeUnit.MINUTES)
         .build()
     WorkManager.getInstance(context).enqueue(workRequest)
 }
