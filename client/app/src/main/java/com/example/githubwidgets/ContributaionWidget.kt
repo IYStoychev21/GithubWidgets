@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-var contributaionGraph = Array(30) { Array(7) { Color(0xff161b22) } }
+var contributaionGraph = Array(210) { Color(0xff161b22) }
 
 class ContributaionWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -61,13 +61,11 @@ class ContributaionWidget : GlanceAppWidget() {
 }
 
 @Composable
-fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
-
-    contributaionGraph[1][3] = Color(0xffffffff)
-
+fun ContributionWidgetLayout(contributaionGraph: Array<Color>) {
     val squireSpacing = 2.dp
     val squireSize = 10.dp
     val corners = 2.dp
+    val rowLength = 7
 
     Row {
         Row {
@@ -78,7 +76,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -92,7 +90,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -113,7 +111,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -127,7 +125,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -148,7 +146,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -162,7 +160,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -183,7 +181,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -197,7 +195,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -218,7 +216,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -232,7 +230,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -253,7 +251,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 
@@ -267,7 +265,7 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Array<Color>>) {
                             Box(
                                 modifier = GlanceModifier
                                     .size(squireSize)
-                                    .background(contributaionGraph[i][j])
+                                    .background(contributaionGraph[i * rowLength + j])
                                     .cornerRadius(corners)
                             ) {}
 

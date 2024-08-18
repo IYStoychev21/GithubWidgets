@@ -38,24 +38,17 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                     val responseData = response.body?.string() ?: ""
                     val jsonResponse = JSONObject(responseData ?: "")
 
-                    // Save or process the response data here
-                    // Example: Save to SharedPreferences or a database
-//                    for (i in 14..349) {
-//                        val row = (i - 14) / 49
-//                        val col = (i - 14) % 49
-//
-//                        Log.d("ColorWidget", jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level").toString())
-//
-//                        when (jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level")) {
-//                            0 -> contributaionGraph[row][col] = Color(0xff161B22)
-//                            1 -> contributaionGraph[row][col] = Color(0xff0E4429);
-//                            2 -> contributaionGraph[row][col] = Color(0xff26A641)
-//                            3 -> contributaionGraph[row][col] = Color(0xff26A641)
-//                            4 -> contributaionGraph[row][col] = Color(0xff39D353)
-//                        }
-//
-//                    }
+                    for (i in 154..363) {
+                        Log.d("ColorWidget", jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level").toString())
 
+                        when (jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level")) {
+                            0 -> contributaionGraph[i - 154] = Color(0xff161B22)
+                            1 -> contributaionGraph[i - 154] = Color(0xff0E4429);
+                            2 -> contributaionGraph[i - 154] = Color(0xff006D32)
+                            3 -> contributaionGraph[i - 154] = Color(0xff26A641)
+                            4 -> contributaionGraph[i - 154] = Color(0xff39D353)
+                        }
+                    }
 
                     // Update Glance widgets
                     updateGlanceWidgets(applicationContext)
