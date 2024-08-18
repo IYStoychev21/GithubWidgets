@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.updateAll
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -20,7 +21,6 @@ import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
-
     override suspend fun doWork(): Result {
         Log.d("NetworkWorker", "doWork started")
 
@@ -28,7 +28,7 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
             val client = OkHttpClientInstance.client
 
             val request = Request.Builder()
-                .url("https://github-widgets-api-c9b3bdamdrg0hrg3.germanywestcentral-01.azurewebsites.net/get/contributions/iystoychev21")
+                .url("https://github-widgets-api-c9b3bdamdrg0hrg3.germanywestcentral-01.azurewebsites.net/get/contributions/${CredentialManager.getUsername()}")
                 .build()
 
             try {
@@ -38,20 +38,21 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                     val responseData = response.body?.string() ?: ""
                     val jsonResponse = JSONObject(responseData ?: "")
 
-                    for (i in 154..363) {
-                        Log.d("ColorWidget", jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level").toString())
+                    val colors = ContributaionGraph(applicationContext)
 
+                    for (i in 154..363) {
                         when (jsonResponse.getJSONArray("contributions").getJSONObject(i).getInt("level")) {
-                            0 -> contributaionGraph[i - 154] = Color(0xff161B22)
-                            1 -> contributaionGraph[i - 154] = Color(0xff0E4429);
-                            2 -> contributaionGraph[i - 154] = Color(0xff006D32)
-                            3 -> contributaionGraph[i - 154] = Color(0xff26A641)
-                            4 -> contributaionGraph[i - 154] = Color(0xff39D353)
+                            0 -> colors.updateColor(i - 154, Color(0xff161B22))
+                            1 -> colors.updateColor(i - 154, Color(0xff0E4429))
+                            2 -> colors.updateColor(i - 154, Color(0xff006D32))
+                            3 -> colors.updateColor(i - 154, Color(0xff26A641))
+                            4 -> colors.updateColor(i - 154, Color(0xff39D353))
                         }
                     }
 
                     // Update Glance widgets
-                    updateGlanceWidgets(applicationContext)
+//                    updateGlanceWidgets(applicationContext)
+                    ContributaionWidget().updateAll(applicationContext)
 
                     Result.success()
                 } else {
@@ -61,15 +62,6 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
                 e.printStackTrace()
                 Result.failure()
             }
-        }
-    }
-
-    private suspend fun updateGlanceWidgets(context: Context) {
-        val glanceAppWidgetManager = GlanceAppWidgetManager(context)
-        val glanceIds = glanceAppWidgetManager.getGlanceIds(ContributaionWidget::class.java)
-
-        glanceIds.forEach { glanceId ->
-            ContributaionWidget().update(context, glanceId)
         }
     }
 }

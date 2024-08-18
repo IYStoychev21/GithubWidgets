@@ -2,6 +2,7 @@ package com.example.githubwidgets
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +22,7 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.updateAll
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
@@ -37,13 +39,16 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
-var contributaionGraph = Array(210) { Color(0xff161b22) }
+//var contributaionGraph =
+//    Array(210) { Color(0xff161b22) }
 
 class ContributaionWidget : GlanceAppWidget() {
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             Box(
@@ -53,8 +58,10 @@ class ContributaionWidget : GlanceAppWidget() {
                     .padding(0.dp),
                 contentAlignment = Alignment.Center
             ) {
+                val colorRepository = ContributaionGraph(context)
+                val colors = colorRepository.getColors()
 
-                ContributionWidgetLayout(contributaionGraph = contributaionGraph)
+                ContributionWidgetLayout(colors)
             }
         }
     }
@@ -62,7 +69,7 @@ class ContributaionWidget : GlanceAppWidget() {
 
 @Composable
 fun ContributionWidgetLayout(contributaionGraph: Array<Color>) {
-    val squireSpacing = 2.dp
+    val squireSpacing = 1.5.dp
     val squireSize = 10.dp
     val corners = 2.dp
     val rowLength = 7
@@ -280,21 +287,13 @@ fun ContributionWidgetLayout(contributaionGraph: Array<Color>) {
     }
 }
 
-suspend fun updateMyWidget(context: Context) {
-    val glanceAppWidgetManager = GlanceAppWidgetManager(context)
-    val glanceIds = glanceAppWidgetManager.getGlanceIds(ContributaionWidget::class.java)
-    glanceIds.forEach { glanceId ->
-        ContributaionWidget().update(context, glanceId)
-    }
-}
-
 class ContributaionWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ContributaionWidget()
 }
 
 class MyWidgetWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        updateMyWidget(applicationContext)
+        ContributaionWidget().updateAll(applicationContext)
         return Result.success()
     }
 }
