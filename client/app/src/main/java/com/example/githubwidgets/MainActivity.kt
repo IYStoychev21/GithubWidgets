@@ -26,6 +26,7 @@ import androidx.security.crypto.MasterKey
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        scheduleWidgetUpdates(this)
 
         CredentialManager.sharedPreferences = EncryptedSharedPreferences.create(
             this,
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
         val token = data?.getQueryParameter("token")
         val refreshToken = data?.getQueryParameter("refresh_token")
 
-        handleToken(refreshToken, refreshToken)
+        handleToken(token, refreshToken)
     }
 
     private fun handleToken(token: String?, refreshToken: String?) {
