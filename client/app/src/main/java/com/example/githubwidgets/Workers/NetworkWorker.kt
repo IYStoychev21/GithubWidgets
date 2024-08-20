@@ -30,7 +30,7 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
         val colorDao = database.colorDao()
         val colorRepository = ColorRepository(colorDao)
 
-
+        colorRepository.clearColors()
         for (i in 161..contributaionList.size - 1) {
             when(contributaionList[i].level) {
                 0 -> colorRepository.addColor("#161B22")
