@@ -14,6 +14,7 @@ import androidx.work.WorkManager
 
 class ContributaionWidgetUpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
+        manualNetworkWorkerUpdate(applicationContext)
         ContributionWidget().updateAll(applicationContext)
         return Result.success()
     }
