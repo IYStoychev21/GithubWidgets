@@ -1,50 +1,39 @@
 package com.example.githubwidgets
-
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
 object CredentialManager {
-    lateinit var sharedPreferences: SharedPreferences
+    fun initCredentialPrefs(context: Context) {
+        m_CredentialPrefs = EncryptedSharedPreferences.create(
+            context,
+            "credentials_prefs",
+            MasterKey.Builder(context)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
 
-    fun storeToken(token: String) {
-        with(sharedPreferences.edit()) {
-            putString("token", token)
+    fun storeCredential(key: String, value: String) {
+        with(m_CredentialPrefs.edit()) {
+            putString(key, value)
             apply()
         }
     }
 
-    fun getToken(): String? {
-        return sharedPreferences.getString("token", null)
+    fun getCredential(key: String): String? {
+        return m_CredentialPrefs.getString(key, null)
     }
 
-    fun storeUsername(username: String) {
-        with(sharedPreferences.edit()) {
-            putString("username", username)
+    fun clearCredential(key: String) {
+        with(m_CredentialPrefs.edit()) {
+            remove(key)
             apply()
         }
     }
 
-    fun getUsername(): String? {
-        return sharedPreferences.getString("username", null)
-    }
-
-    fun storeRefreshToken(refreshToken: String) {
-        with(sharedPreferences.edit()) {
-            putString("refresh_token", refreshToken)
-            apply()
-        }
-    }
-
-    fun getRefreshToken(): String? {
-        return sharedPreferences.getString("refresh_token", null)
-    }
-
-    fun clearToken() {
-        with(sharedPreferences.edit()) {
-            remove("token")
-            apply()
-        }
-    }
+    private lateinit var m_CredentialPrefs: SharedPreferences;
 }

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">GitHub Widgets</string>
-    <string name="auth_url">https://github-widgets-api-c9b3bdamdrg0hrg3.germanywestcentral-01.azurewebsites.net/auth/github</string>
-    <string name="title_activity_profile">ProfileActivity</string>>
+    <string name="app_name">Github Widgets</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

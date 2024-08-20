@@ -1,4 +1,4 @@
-package com.example.githubwidgets.ui.theme
+package com.example.githubwidgets.Activities.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

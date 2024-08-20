@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GitHub Widgets"
+rootProject.name = "Github Widgets"
 include(":app")
