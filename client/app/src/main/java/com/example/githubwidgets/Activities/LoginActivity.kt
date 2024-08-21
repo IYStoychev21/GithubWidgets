@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import com.example.githubwidgets.Activities.ProfileActivity
 import com.example.githubwidgets.Activities.ui.theme.GithubWidgetsTheme
 import com.example.githubwidgets.Storage.UserStorage
+import com.example.githubwidgets.Workers.scheduleNetworkWorker
+import com.example.githubwidgets.Workers.scheduleWidgetUpdates
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,9 @@ class LoginActivity : ComponentActivity() {
 
         CredentialManager.initCredentialPrefs(this)
         UserStorage.initPref(this)
+
+        scheduleWidgetUpdates(this)
+        scheduleNetworkWorker(this)
 
         if(CredentialManager.getCredential("token") != null) {
             val profileIntent = Intent(this, ProfileActivity::class.java).apply {  }

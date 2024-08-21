@@ -48,7 +48,7 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
 }
 
 fun scheduleNetworkWorker(context: Context) {
-    val workRequest = PeriodicWorkRequestBuilder<NetworkWorker>(15, TimeUnit.MINUTES)
+    val workRequest = PeriodicWorkRequestBuilder<NetworkWorker>(1, TimeUnit.HOURS)
         .build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(

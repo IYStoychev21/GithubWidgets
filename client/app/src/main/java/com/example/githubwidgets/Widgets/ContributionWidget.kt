@@ -27,6 +27,7 @@ import androidx.glance.state.GlanceStateDefinition
 import com.example.githubwidgets.Storage.AppDatabase
 import com.example.githubwidgets.Storage.ColorRepository
 import com.example.githubwidgets.Storage.UserStorage
+import com.example.githubwidgets.Workers.manualNetworkWorkerUpdate
 import com.example.githubwidgets.Workers.scheduleNetworkWorker
 import com.example.githubwidgets.Workers.scheduleWidgetUpdates
 import kotlinx.coroutines.flow.Flow
@@ -65,8 +66,7 @@ class ContributionWidget : GlanceAppWidget() {
         }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        scheduleWidgetUpdates(context)
-        scheduleNetworkWorker(context)
+        manualNetworkWorkerUpdate(context)
 
         provideContent {
 

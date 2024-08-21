@@ -31,12 +31,12 @@ fun updateWidgetManually(context: Context) {
 }
 
 fun scheduleWidgetUpdates(context: Context) {
-    val workRequest = PeriodicWorkRequestBuilder<ContributaionWidgetUpdateWorker>(15, TimeUnit.MINUTES)
+    val workRequest = PeriodicWorkRequestBuilder<ContributaionWidgetUpdateWorker>(1, TimeUnit.HOURS)
         .build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(
         "ContributionWidgetUpdate",
-        ExistingPeriodicWorkPolicy.UPDATE,
+        ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
         workRequest
     )
 }
