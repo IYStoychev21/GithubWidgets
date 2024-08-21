@@ -1,10 +1,8 @@
 package com.example.githubwidgets
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,19 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.lifecycleScope
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.example.githubwidgets.Activities.ProfileActivity
 import com.example.githubwidgets.Activities.ui.theme.GithubWidgetsTheme
 import com.example.githubwidgets.Storage.UserStorage
-import com.example.githubwidgets.Workers.manualNetworkWorkerUpdate
-import com.example.githubwidgets.Workers.scheduleNetworkWorker
-import com.example.githubwidgets.Workers.scheduleWidgetUpdates
-import kotlinx.coroutines.launch
-import java.util.prefs.Preferences
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +43,6 @@ class LoginActivity : ComponentActivity() {
             startActivity(profileIntent)
             finish()
         }
-
-        scheduleWidgetUpdates(this)
-        scheduleNetworkWorker(this)
 
         enableEdgeToEdge()
         setContent {

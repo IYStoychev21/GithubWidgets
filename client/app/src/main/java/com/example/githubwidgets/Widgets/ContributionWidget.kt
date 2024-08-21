@@ -26,6 +26,9 @@ import androidx.glance.layout.width
 import androidx.glance.state.GlanceStateDefinition
 import com.example.githubwidgets.Storage.AppDatabase
 import com.example.githubwidgets.Storage.ColorRepository
+import com.example.githubwidgets.Storage.UserStorage
+import com.example.githubwidgets.Workers.scheduleNetworkWorker
+import com.example.githubwidgets.Workers.scheduleWidgetUpdates
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
@@ -62,6 +65,9 @@ class ContributionWidget : GlanceAppWidget() {
         }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        scheduleWidgetUpdates(context)
+        scheduleNetworkWorker(context)
+
         provideContent {
 
             Box(

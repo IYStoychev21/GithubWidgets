@@ -1,6 +1,7 @@
 package com.example.githubwidgets.Workers
 
 import android.content.Context
+import android.util.Log
 import androidx.glance.appwidget.updateAll
 import androidx.work.WorkerParameters
 import androidx.work.CoroutineWorker
