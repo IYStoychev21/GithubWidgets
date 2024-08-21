@@ -16,7 +16,7 @@ object UserAPI {
 
         val request = Request.Builder()
             .url("https://github-widgets-api-c9b3bdamdrg0hrg3.germanywestcentral-01.azurewebsites.net/user")
-            .addHeader("Authorization", "${CredentialManager.getCredential("token")} ${CredentialManager.getCredential("refresh_token")}")
+            .addHeader("Authorization", "${CredentialManager.getCredential("token")}")
             .build()
 
         var response: String?
@@ -26,9 +26,6 @@ object UserAPI {
         }
 
         val jsonResponse = JSONObject(response ?: "")
-
-        CredentialManager.storeCredential("token", jsonResponse.getString("token"))
-        CredentialManager.storeCredential("refresh_token", jsonResponse.getString("refresh_token"))
 
         return UserType(
             username = jsonResponse.getString("username"),
