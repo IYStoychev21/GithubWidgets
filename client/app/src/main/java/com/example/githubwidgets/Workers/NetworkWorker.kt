@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit
 
 class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
+        
+        Log.d("PeriodicWorker", "Work is being done!")
 
         val contributaionList = ContributionsAPI.getContributions()
 
@@ -48,12 +50,12 @@ class NetworkWorker(context: Context, params: WorkerParameters) : CoroutineWorke
 }
 
 fun scheduleNetworkWorker(context: Context) {
-    val workRequest = PeriodicWorkRequestBuilder<NetworkWorker>(1, TimeUnit.HOURS)
+    val workRequest = PeriodicWorkRequestBuilder<NetworkWorker>(15, TimeUnit.MINUTES)
         .build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(
         "NetworkWorker",
-        ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+        ExistingPeriodicWorkPolicy.UPDATE,
         workRequest
     )
 }
