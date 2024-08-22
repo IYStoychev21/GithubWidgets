@@ -26,13 +26,8 @@ import androidx.glance.layout.width
 import androidx.glance.state.GlanceStateDefinition
 import com.example.githubwidgets.Storage.AppDatabase
 import com.example.githubwidgets.Storage.ColorRepository
-import com.example.githubwidgets.Storage.UserStorage
-import com.example.githubwidgets.Workers.manualNetworkWorkerUpdate
-import com.example.githubwidgets.Workers.scheduleNetworkWorker
-import com.example.githubwidgets.Workers.scheduleWidgetUpdates
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class ContributionWidgetStorage(private val context: Context) : DataStore<List<Color>>{
@@ -66,8 +61,6 @@ class ContributionWidget : GlanceAppWidget() {
         }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        manualNetworkWorkerUpdate(context)
-
         provideContent {
 
             Box(

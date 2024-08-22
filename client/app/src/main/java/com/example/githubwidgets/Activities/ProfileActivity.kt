@@ -1,6 +1,5 @@
 package com.example.githubwidgets.Activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,26 +32,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.glance.Button
-import androidx.glance.appwidget.updateAll
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.githubwidgets.Activities.ui.theme.GithubWidgetsTheme
 import com.example.githubwidgets.CredentialManager
 import com.example.githubwidgets.LoginActivity
 import com.example.githubwidgets.Storage.UserStorage
-import com.example.githubwidgets.Widgets.ContributionWidget
-import com.example.githubwidgets.Workers.manualNetworkWorkerUpdate
 import com.example.githubwidgets.Workers.updateWidgetManually
 import com.example.githubwidgets.apis.UserAPI
 import com.example.githubwidgets.types.UserType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
